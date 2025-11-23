@@ -1,0 +1,290 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+}
+
+body {
+  position: relative;
+  -webkit-clip-path: none;
+  clip-path: none;
+}
+
+/* Variáveis que você deve ajustar para a sua spritesheet */
+:root {
+  /* largura do frame em pixels (sem unidade para multiplicar): ex 25px */
+  --frame-width: 26px;
+  --frame-height: 43px;
+  --frame-count: 4; /* número de frames da animação de andar */
+  --scale: 2;
+  --scale-falling: 2; /* Scale separado para sprite de queda/dragging/fallen */
+  --scale-ground: 2; /* Scale para sprite no chão (susie_chao.png) */
+  --scale-sleeping: 2; /* Scale para sprite dormindo */
+  --sleep-frames: 4; /* Número de frames na animação de dormir */
+  --scale-standing: 2; /* Scale para sprite standing (antiga parada) */
+  --standing-frames: 4; /* Número de frames na animação de standing */
+  --scale-stretching: 2; /* Scale para sprite stretching (antiga espreguica) */
+}
+
+#character {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: calc(var(--frame-width) * var(--scale));
+  height: calc(var(--frame-height) * var(--scale));
+  background-image: url("assets/susie_andando.png");
+  background-size: calc(var(--frame-width) * var(--frame-count) * var(--scale))
+    calc(var(--frame-height) * var(--scale));
+  background-repeat: no-repeat;
+  -webkit-app-region: no-drag; /* apenas o sprite será arrastável */
+  image-rendering: pixelated; /* evita suavização em pixel art */
+  overflow: visible; /* garante que o sprite não seja cortado */
+}
+
+/* Animação de andar: usa steps para passar frame-a-frame */
+.walking {
+  animation: walk 1s steps(var(--frame-count)) infinite;
+}
+
+/* Andando para a direita (direction = 1) - sprite normal */
+.walking.right {
+  transform: scaleX(-1);
+}
+
+/* Andando para a esquerda (direction = -1) - espelha sprite */
+.walking.left {
+  transform: scaleX(1);
+}
+
+/* Sprite de queda - 68x40 com dois sprites de 34x40 cada */
+#character.falling {
+  background-image: url("assets/susie_caindo.png") !important;
+  background-size: calc(68px * var(--scale-falling))
+    calc(40px * var(--scale-falling)) !important;
+  width: calc(34px * var(--scale-falling)) !important;
+  height: calc(40px * var(--scale-falling)) !important;
+  animation: none !important;
+}
+
+/* Queda virada para a direita - sprite normal */
+#character.falling.right {
+  background-position: 0 0 !important;
+  transform: scaleX(1) !important;
+}
+
+/* Queda virada para a esquerda - espelha sprite */
+#character.falling.left {
+  background-position: 0 0 !important;
+  transform: scaleX(-1) !important;
+}
+
+/* Animação de "caído no chão" - usa susie_chao.png com 2 frames de 27x34px */
+#character.fallen {
+  background-image: url("assets/susie_chao.png") !important;
+  background-size: calc(54px * var(--scale-ground))
+    calc(34px * var(--scale-ground)) !important;
+  width: calc(27px * var(--scale-ground)) !important;
+  height: calc(34px * var(--scale-ground)) !important;
+  animation: fallen-blink 0.4s steps(1) forwards !important;
+  background-position: 0 0;
+}
+
+/* Caída virada para a direita - sprite normal */
+#character.fallen.right {
+  transform: scaleX(1) !important;
+}
+
+/* Caída virada para a esquerda - inverte o sprite */
+#character.fallen.left {
+  transform: scaleX(-1) !important;
+}
+
+/* Animação de "sendo arrastado" - usa o mesmo sprite de queda */
+#character.dragging {
+  background-image: url("assets/susie_caindo.png") !important;
+  background-size: calc(68px * var(--scale-falling))
+    calc(40px * var(--scale-falling)) !important;
+  width: calc(34px * var(--scale-falling)) !important;
+  height: calc(40px * var(--scale-falling)) !important;
+  animation: none !important;
+}
+
+/* Arrastando virada para a direita - sprite normal */
+#character.dragging.right {
+  background-position: 0 0 !important;
+  transform: scaleX(1) !important;
+}
+
+/* Arrastando virada para a esquerda - espelha sprite */
+#character.dragging.left {
+  background-position: 0 0 !important;
+  transform: scaleX(-1) !important;
+}
+
+/* ========================================================================== */
+/* ESTADO: DORMINDO (SLEEPING) - susie_dormindo.png (4 frames, 51x36px) */
+/* ========================================================================== */
+#character.sleeping {
+  background-image: url("assets/susie_dormindo.png") !important;
+  background-size: calc(204px * var(--scale-sleeping))
+    calc(36px * var(--scale-sleeping)) !important;
+  width: calc(51px * var(--scale-sleeping)) !important;
+  height: calc(36px * var(--scale-sleeping)) !important;
+  background-repeat: no-repeat !important;
+  overflow: visible !important;
+  box-sizing: content-box !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Dormindo virada para a direita - sprite espelhado com animação */
+#character.sleeping.right {
+  transform: scaleX(-1) !important;
+  transform-origin: center center;
+  animation-name: idle-sleep !important;
+  animation-duration: 1s !important;
+  animation-timing-function: steps(4) !important;
+  animation-iteration-count: var(--sleep-cycles) !important;
+  animation-fill-mode: forwards !important;
+}
+
+/* Dormindo virada para a esquerda - sprite normal com animação */
+#character.sleeping.left {
+  transform: scaleX(1) !important;
+  transform-origin: center center;
+  animation-name: idle-sleep !important;
+  animation-duration: 1s !important;
+  animation-timing-function: steps(4) !important;
+  animation-iteration-count: var(--sleep-cycles) !important;
+  animation-fill-mode: forwards !important;
+}
+
+/* ========================================================================== */
+/* ESTADO: STANDING (ANTIGO PARADA) - susie_parada.png (3 frames, 26x43px) */
+/* ========================================================================== */
+#character.standing {
+  background-image: url("assets/susie_parada.png") !important;
+  background-size: calc(
+      var(--frame-width) * var(--standing-frames) * var(--scale-standing)
+    )
+    calc(43px * var(--scale-standing)) !important;
+  width: calc(26px * var(--scale-standing)) !important;
+  height: calc(43px * var(--scale-standing)) !important;
+  background-repeat: no-repeat !important;
+  overflow: visible !important;
+  box-sizing: content-box !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  /* Animação */
+  animation-name: idle-standing !important;
+  animation-duration: 0.8s !important;
+  animation-timing-function: steps(var(--standing-frames)) !important;
+  animation-iteration-count: var(--standing-cycles) !important;
+  animation-fill-mode: forwards !important;
+
+  /* Sem espelhamento (sempre normal) */
+  transform: scaleX(1) !important;
+  transform-origin: center center;
+}
+
+/* ========================================================================== */
+/* ESTADO: STRETCHING (ANTIGO ESPREGUICA) - susie_espreguica.png (1 frame, 28x45px) */
+/* ========================================================================== */
+#character.stretching {
+  background-image: url("assets/susie_espreguica.png") !important;
+  background-size: calc(28px * var(--scale-stretching))
+    calc(45px * var(--scale-stretching)) !important;
+  width: calc(28px * var(--scale-stretching)) !important;
+  height: calc(45px * var(--scale-stretching)) !important;
+  background-repeat: no-repeat !important;
+  overflow: visible !important;
+  box-sizing: content-box !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  /* Animação (apenas para contar o tempo) */
+  animation-name: idle-stretching !important;
+  animation-duration: 1s !important;
+  animation-timing-function: steps(1) !important;
+  /* animation-iteration-count: var(--stretching-cycles) !important; */
+  animation-iteration-count: 1 !important;
+  animation-fill-mode: forwards !important;
+}
+
+/* Stretching virada para a direita - sprite normal */
+#character.stretching.right {
+  transform: scaleX(1) !important;
+  transform-origin: center center;
+}
+
+/* Stretching virada para a esquerda - espelha sprite */
+#character.stretching.left {
+  transform: scaleX(-1) !important;
+  transform-origin: center center;
+}
+
+@keyframes walk {
+  from {
+    background-position: 0 0;
+  }
+  /* calcula o deslocamento total: -frame-width * frame-count */
+  to {
+    background-position: calc(
+        var(--frame-width) * var(--frame-count) * var(--scale) * -1
+      )
+      0;
+  }
+}
+
+/* Animação de piscar no chão - vai do frame 1 para o frame 2 */
+@keyframes fallen-blink {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: calc(-27px * var(--scale-ground)) 0;
+  }
+}
+
+/* Animação de dormir - percorre todos os frames (4 frames) */
+@keyframes idle-sleep {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: calc(-204px * var(--scale-sleeping)) 0;
+  }
+}
+
+/* Animação de standing - percorre todos os frames */
+@keyframes idle-standing {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: calc(
+        var(--frame-width) * var(--standing-frames) * var(--scale-standing) * -1
+      )
+      0;
+  }
+}
+
+/* Animação de stretching - estática (1 frame) */
+@keyframes idle-stretching {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
