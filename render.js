@@ -14,7 +14,7 @@ const WINDOW_HEIGHT = 130; // Altura da janela (deve coincidir com main.js)
 const WALK_SPEED = 2; // Pixels por frame
 const GRAVITY = 0.8; // Aceleração da gravidade
 const GROUND_OFFSET = 45; // Distância do chão da tela
-const MIN_UPDATE_INTERVAL = 24; // ~41fps (balanceamento entre suavidade e CPU/Memória)
+const MIN_UPDATE_INTERVAL = 24; // ~60fps para movimento suave
 const MIN_WALK_TIME = 5000; // Tempo mínimo andando em uma direção (5s)
 const DIRECTION_CHANGE_CHANCE = 0.01; // Chance de mudar de direção por frame (1%)
 
@@ -75,6 +75,10 @@ let dragOffsetY = 0;
 // Controle de throttling para IPC
 let lastUpdateTime = 0;
 
+// Rastreamento de posição para evitar IPC calls desnecessárias
+let lastSentPosX = -1;
+let lastSentPosY = -1;
+
 // Controle de animação de ociosidade (standing, sleeping, stretching)
 let lastIdleCheck = 0;
 let idleCyclesRemaining = 0;
@@ -88,12 +92,23 @@ let lastIdleState = ""; // Último estado idle executado
 /**
  * Atualiza a posição da janela com throttling
  * Limita atualizações a ~30fps para evitar sobrecarga do IPC
+ * Também evita enviar a mesma posição múltiplas vezes
  */
 function updateWindowPosition(force = false) {
   const now = Date.now();
-  if (force || now - lastUpdateTime >= MIN_UPDATE_INTERVAL) {
-    ipcRenderer.send("set-window-position", Math.round(posX), Math.round(posY));
+  const roundedX = Math.round(posX);
+  const roundedY = Math.round(posY);
+
+  // Só envia se forçado, passou o intervalo E a posição mudou
+  if (
+    force ||
+    (now - lastUpdateTime >= MIN_UPDATE_INTERVAL &&
+      (roundedX !== lastSentPosX || roundedY !== lastSentPosY))
+  ) {
+    ipcRenderer.send("set-window-position", roundedX, roundedY);
     lastUpdateTime = now;
+    lastSentPosX = roundedX;
+    lastSentPosY = roundedY;
   }
 }
 
@@ -514,7 +529,7 @@ function gameLoop() {
       lastDirection = direction;
     }
 
-    // Envia nova posição com throttling
+    // Envia nova posição com throttling (só quando posição muda)
     updateWindowPosition();
   }
 

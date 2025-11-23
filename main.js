@@ -15,6 +15,7 @@ function createWindow() {
     frame: false, // Remove a barra de título, menu, etc.
     alwaysOnTop: true, // Mantém a janela sempre na frente
     hasShadow: false, // Remove sombra que pode causar artefatos visuais
+    resizable: false, // Impede redimensionamento acidental
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,

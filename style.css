@@ -45,6 +45,7 @@ body {
   -webkit-app-region: no-drag; /* apenas o sprite será arrastável */
   image-rendering: pixelated; /* evita suavização em pixel art */
   overflow: visible; /* garante que o sprite não seja cortado */
+  will-change: transform, background-position; /* otimiza para 60fps */
 }
 
 /* Animação de andar: usa steps para passar frame-a-frame */
