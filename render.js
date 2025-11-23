@@ -454,8 +454,12 @@ function gameLoop() {
           currentState = "walking";
           // Ajusta posY de volta para o sprite de andar (que é maior)
           posY = groundY;
-          // Reinicia timer de direção ao voltar a andar
+          // Força atualização da posição da janela
+          updateWindowPosition(true);
+
+          // Reinicia timer de direção e idle ao voltar a andar
           lastDirectionChangeTime = Date.now();
+          lastIdleCheck = Date.now(); // Evita entrar em idle imediatamente
         }
       }, 2000);
     }
