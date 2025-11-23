@@ -10,6 +10,8 @@ A cute, interactive desktop companion that lives on your taskbar!
 
 Susie is a pixel-art character from Deltarune who walks, sleeps, stretches, and interacts with your desktop environment. She is designed to be a lightweight, fun presence on your screen.
 
+> 📸 Check out the [Screenshots](#screenshots) section below to see Susie in action!
+
 ## Features
 
 - **Autonomous Behavior**: Susie walks around your screen, changing direction randomly or when hitting edges.
@@ -47,6 +49,28 @@ Susie is a pixel-art character from Deltarune who walks, sleeps, stretches, and 
 ## Credits
 
 Made with by **Jordão Quirino** for **Leli**.
+
+---
+
+## Screenshots
+
+Here's Susie showing off her different states:
+
+### Standing
+
+![Susie standing and looking around](assets/prints/print_parada.png)
+
+### Sleeping
+
+![Susie taking a nap](assets/prints/print_dormindo.png)
+
+### Stretching
+
+![Susie stretching](assets/prints/print_espreguicando.png)
+
+### Falling
+
+![Susie falling after being dropped](assets/prints/print_caindo.png)
 
 ---
 
