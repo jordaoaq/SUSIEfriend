@@ -60,19 +60,19 @@ Here's Susie showing off her different states:
 
 ### Standing
 
-<img src="assets/prints/print_parada.png" alt="Susie standing and looking around" width="400" />
+<img src="./assets/prints/print_parada.png" alt="Susie standing and looking around" width="400" />
 
 ### Sleeping
 
-<img src="assets/prints/print_dormindo.png" alt="Susie taking a nap" width="400" />
+<img src="./assets/prints/print_dormindo.png" alt="Susie taking a nap" width="400" />
 
 ### Stretching
 
-<img src="assets/prints/print_espreguicando.png" alt="Susie stretching" width="400" />
+<img src="./assets/prints/print_espreguicando.png" alt="Susie stretching" width="400" />
 
 ### Falling
 
-<img src="assets/prints/print_caindo.png" alt="Susie falling after being dropped" width="400" />
+<img src="./assets/prints/print_caindo.png" alt="Susie falling after being dropped" width="400" />
 
 ---
 
