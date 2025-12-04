@@ -76,4 +76,4 @@ Here's Susie showing off her different states:
 
 ---
 
-_Note: This project is a personal gift and a fun experiment in desktop pets._
+Para meu amor, Leli <3
